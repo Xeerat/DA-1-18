@@ -3,23 +3,23 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import fetch_california_housing
 
 
-# Функция для поиска выбросов по IQR
-def detect_emission(data):
+def detect_emission(data, coef=1.5):
+    """Функция для поиска выбросов по IQR"""
     # Определение границ
     Q1 = data.quantile(0.25)
     Q3 = data.quantile(0.75)
     IQR = Q3 - Q1
-    lower = Q1 - 1.5 * IQR
-    upper = Q3 + 1.5 * IQR
+    lower = Q1 - coef * IQR
+    upper = Q3 + coef * IQR
     # Числа вне границ являются выбросами
     return (data < lower) | (data > upper)
 
 
-# Функция для построения графика
-def create_graph(data, emmisions):
-    plt.figure(figsize=(10,6))
-    plt.scatter(range(len(data[emmisions])), data[emmisions], color="red", label="Выбросы")
-    plt.scatter(range(len(data[~emmisions])), data[~emmisions])
+def create_graph(data, emisions):
+    """Функция для построения графика"""
+    plt.figure(figsize=(16, 8))
+    plt.scatter(range(len(data[emisions])), data[emisions], color="red", label="Выбросы")
+    plt.scatter(range(len(data[~emisions])), data[~emisions])
     plt.xlabel("Географические зоны Калифорнии")
     plt.ylabel("Медианный доход")
     plt.title("Выбросы по IQR")
@@ -36,13 +36,22 @@ def main():
 
     # Находим выбросы по признаку
     # Выбросы обозначены как True, все остальное False
-    emmisions = detect_emission(med)
-    
-    # Вывод выбросов
-    print(med[emmisions])
+    emisions = detect_emission(med, 1.5)
+    if emisions.sum() == 0:
+        print("Выбросов не найдено")
+        return
 
+    # Вывод выбросов
+    print(med[emisions])
+
+    # Проверка типа данных
+    if not med.dtype.kind in "if":
+        print("Для построения графика данные должны быть числовыми")
+        return
+    
     # Построение графика
-    create_graph(med, emmisions)
+    create_graph(med, emisions)
+
 
 if __name__ == "__main__":
     main()
