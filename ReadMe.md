@@ -8,9 +8,9 @@
 Программа строит scatter график с помощью "matplotlib". На графике выбросы выделены красным цветом.
 
 ## Необходимые библиотеки
--scikit-learn >= 1.0
--matplotlib >= 3.0
--pandas >= 1.0
+scikit-learn >= 1.0
+matplotlib >= 3.0
+pandas >= 1.0
 
 ## Установка
 pip install scikit-learn pandas matplotlib
